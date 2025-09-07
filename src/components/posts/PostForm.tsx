@@ -88,13 +88,8 @@ const PostForm = ({ post, users, onSubmit, onCancel }: PostFormProps) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg p-6 w-full max-w-md">
-        <h2 className="text-xl font-bold mb-4">
-          {post ? "Postu Düzenle" : "Yeni Post Ekle"}
-        </h2>
-        
-        <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="bg-white max-w-lg mx-auto p-4 sm:p-6">
+      <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="userId" className="block text-sm font-medium text-gray-700">
               Kullanıcı
@@ -105,7 +100,7 @@ const PostForm = ({ post, users, onSubmit, onCancel }: PostFormProps) => {
               value={formData.userId}
               onChange={handleChange}
               required
-              className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-1 transition-colors ${
+              className={`mt-1 block w-full px-3 py-2 text-base border rounded-md focus:outline-none focus:ring-1 focus:ring-offset-1 transition-colors ${
                 getFieldError('userId') && isFieldTouched('userId')
                   ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
                   : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500 hover:border-gray-400'
@@ -139,7 +134,7 @@ const PostForm = ({ post, users, onSubmit, onCancel }: PostFormProps) => {
               value={formData.title}
               onChange={handleChange}
               required
-              className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-1 transition-colors ${
+              className={`mt-1 block w-full px-3 py-2 text-base border rounded-md focus:outline-none focus:ring-1 focus:ring-offset-1 transition-colors ${
                 getFieldError('title') && isFieldTouched('title')
                   ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
                   : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500 hover:border-gray-400'
@@ -158,23 +153,22 @@ const PostForm = ({ post, users, onSubmit, onCancel }: PostFormProps) => {
             </p>
           </div>
 
-          <div className="flex space-x-3 pt-4">
-            <button
-              type="submit"
-              className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-105 active:scale-95"
-            >
-              {post ? "Güncelle" : "Ekle"}
-            </button>
+          <div className="flex justify-end space-x-3 pt-3">
             <button
               type="button"
               onClick={onCancel}
-              className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-105 active:scale-95"
+              className="px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 transition-colors"
             >
               İptal
             </button>
+            <button
+              type="submit"
+              className="px-4 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:ring-offset-1 transition-colors"
+            >
+              {post ? "Güncelle" : "Ekle"}
+            </button>
           </div>
         </form>
-      </div>
       
       <Notification
         message={notification.message}

@@ -1,108 +1,24 @@
-import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import type { Post } from "../../types/post";
 import type { User } from "../../types/user";
-import { getPosts, createPost, updatePost, deletePost } from "../../services/postService";
-import { getUsers } from "../../services/userService";
 import PostCard from "./PostCard";
-import PostForm from "./PostForm";
-import { useNotification } from "../../hooks/useNotification";
-import Notification from "../common/Notification";
+ 
 
-const PostList = () => {
+interface PostListProps {
+  posts: Post[];
+  users: User[];
+  loading: boolean;
+  onAddPost: () => void;
+  onEditPost: (post: Post) => void;
+  onDeletePost: (id: number) => void;
+}
+
+const PostList = ({ posts, users, loading, onAddPost, onEditPost, onDeletePost }: PostListProps) => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>("");
-  const [showForm, setShowForm] = useState<boolean>(false);
-  const [editingPost, setEditingPost] = useState<Post | undefined>(undefined);
-  
-  const { notification, showSuccess, showError, hideNotification } = useNotification();
-  
+
   const userId = searchParams.get('userId');
   const filteredPosts = userId ? posts.filter(post => post.userId === parseInt(userId)) : posts;
-
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      setError("");
-      const [postsData, usersData] = await Promise.all([
-        getPosts(),
-        getUsers()
-      ]);
-      setPosts(postsData);
-      setUsers(usersData);
-    } catch (err) {
-      console.error(err);
-      const errorMessage = "Veriler yüklenirken hata oluştu. Lütfen sayfayı yenileyin.";
-      setError(errorMessage);
-      showError(errorMessage);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const handleCreatePost = async (postData: Omit<Post, 'id'>) => {
-    try {
-      const newPost = await createPost(postData);
-      setPosts(prev => [...prev, newPost]);
-      setShowForm(false);
-      showSuccess("Post başarıyla oluşturuldu!");
-    } catch (err) {
-      console.error(err);
-      const errorMessage = "Post oluşturulurken hata oluştu. Lütfen tekrar deneyin.";
-      setError(errorMessage);
-      showError(errorMessage);
-    }
-  };
-
-  const handleUpdatePost = async (postData: Omit<Post, 'id'>) => {
-    if (!editingPost) return;
-    
-    try {
-      const updatedPost = await updatePost(editingPost.id, postData);
-      setPosts(prev => prev.map(post => 
-        post.id === editingPost.id ? updatedPost : post
-      ));
-      setEditingPost(undefined);
-      showSuccess("Post başarıyla güncellendi!");
-    } catch (err) {
-      console.error(err);
-      const errorMessage = "Post güncellenirken hata oluştu. Lütfen tekrar deneyin.";
-      setError(errorMessage);
-      showError(errorMessage);
-    }
-  };
-
-  const handleDeletePost = async (id: number) => {
-    if (!confirm("Bu postu silmek istediğinizden emin misiniz?")) return;
-    
-    try {
-      await deletePost(id);
-      setPosts(prev => prev.filter(post => post.id !== id));
-      showSuccess("Post başarıyla silindi!");
-    } catch (err) {
-      console.error(err);
-      const errorMessage = "Post silinirken hata oluştu. Lütfen tekrar deneyin.";
-      setError(errorMessage);
-      showError(errorMessage);
-    }
-  };
-
-  const handleEditPost = (post: Post) => {
-    setEditingPost(post);
-  };
-
-  const handleCancelForm = () => {
-    setShowForm(false);
-    setEditingPost(undefined);
-  };
 
   if (loading) {
     return (
@@ -113,32 +29,18 @@ const PostList = () => {
     );
   }
   
-  if (error) {
-    return (
-      <div className="text-center py-8">
-        <div className="bg-red-50 border border-red-200 rounded-md p-4 max-w-md mx-auto">
-          <p className="text-red-600 mb-4">❌ {error}</p>
-          <button
-            onClick={fetchData}
-            className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors"
-          >
-            Tekrar Dene
-          </button>
-        </div>
-      </div>
-    );
-  }
+  // Hata yönetimi üst bileşende yapılır
 
   const selectedUser = userId ? users.find(user => user.id === parseInt(userId)) : null;
 
   return (
     <div>
       {userId && selectedUser && (
-        <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded">
-          <h3 className="font-bold text-green-800">
+        <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded">
+          <h3 className="font-bold text-blue-800">
             {selectedUser.name} kullanıcısının postları (Toplam {filteredPosts.length} Post)
           </h3>
-          <p className="text-sm text-green-600">
+          <p className="text-sm text-blue-600">
             Sadece bu kullanıcının postları gösteriliyor. Tüm postları görmek için filtreyi kaldırın.
           </p>
         </div>
@@ -162,8 +64,8 @@ const PostList = () => {
           )}
           
           <button
-            onClick={() => setShowForm(true)}
-            className="group flex items-center space-x-2 bg-gray-200 text-gray-800 hover:text-white transition-all duration-200 px-3 py-2 rounded-md hover:bg-green-500 border border-gray-100 hover:border-green-100"
+            onClick={onAddPost}
+            className="group flex items-center space-x-2 bg-gray-200 text-gray-800 hover:text-white transition-all duration-200 px-3 py-2 rounded-md hover:bg-blue-500 border border-gray-100 hover:border-blue-100"
           >
             <svg
               className="w-5 h-5 text-gray-600 group-hover:text-white"
@@ -189,8 +91,8 @@ const PostList = () => {
             key={post.id} 
             post={post} 
             users={users}
-            onEdit={handleEditPost}
-            onDelete={handleDeletePost}
+            onEdit={onEditPost}
+            onDelete={onDeletePost}
           />
         ))}
       </div>
@@ -212,22 +114,7 @@ const PostList = () => {
           </div>
         </div>
       )}
-
-      {(showForm || editingPost) && (
-        <PostForm
-          post={editingPost}
-          users={users}
-          onSubmit={editingPost ? handleUpdatePost : handleCreatePost}
-          onCancel={handleCancelForm}
-        />
-      )}
-      
-      <Notification
-        message={notification.message}
-        type={notification.type}
-        isVisible={notification.isVisible}
-        onClose={hideNotification}
-      />
+      {/* Modal ve aksiyonlar üst bileşen PostsPage tarafından yönetilir */}
     </div>
   );
 };
