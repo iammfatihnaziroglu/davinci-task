@@ -28,8 +28,6 @@ const PostList = ({ posts, users, loading, onAddPost, onEditPost, onDeletePost }
       </div>
     );
   }
-  
-  // Hata yönetimi üst bileşende yapılır
 
   const selectedUser = userId ? users.find(user => user.id === parseInt(userId)) : null;
 
@@ -50,7 +48,7 @@ const PostList = ({ posts, users, loading, onAddPost, onEditPost, onDeletePost }
         <h2 className="text-2xl font-medium text-gray-600">
           Post Listesi
         </h2>
-        <div className="flex space-x-2">
+        <div className="flex flex-wrap gap-2">
           {userId && (
             <button
               onClick={() => navigate('/posts')}
@@ -85,7 +83,7 @@ const PostList = ({ posts, users, loading, onAddPost, onEditPost, onDeletePost }
         </div>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
         {filteredPosts.map((post) => (
           <PostCard 
             key={post.id} 

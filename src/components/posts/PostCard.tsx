@@ -12,7 +12,7 @@ const PostCard = ({ post, users, onEdit, onDelete }: PostCardProps) => {
   const user = users.find(u => u.id === post.userId);
   
   return (
-    <div className="p-6 bg-white shadow-sm rounded-lg border border-green-50 hover:shadow-md hover:border-gray-300 transition-all duration-200">
+    <div className="p-6 bg-white shadow-sm rounded-lg border border-green-50 hover:shadow-md hover:border-gray-300 transition-all duration-200 overflow-hidden">
       <div className="flex items-start justify-between mb-4 h-8">
         <h3 className="font-semibold text-gray-900 text-lg pr-2 truncate w-4/5">{post.title}</h3>
       </div>
