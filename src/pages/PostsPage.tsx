@@ -76,7 +76,12 @@ const PostsPage = () => {
   const handleCreatePost = async (postData: Omit<Post, "id">) => {
     try {
       const newPost = await createPost(postData);
-      setPosts((prev) => [...prev, newPost]);
+      setPosts((prev) => {
+        const maxId = prev.reduce((max, p) => (p.id > max ? p.id : max), 0);
+        const nextId = maxId + 1;
+        const postToAdd: Post = { ...newPost, id: nextId };
+        return [...prev, postToAdd];
+      });
       setShowForm(false);
       setHighlightCount(true);
       setTimeout(() => setHighlightCount(false), 2000);

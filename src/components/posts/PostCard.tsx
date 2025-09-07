@@ -13,7 +13,7 @@ const PostCard = ({ post, users, onEdit, onDelete }: PostCardProps) => {
   const user = users.find(u => u.id === post.userId);
   
   return (
-    <div className="p-6 bg-white shadow-sm rounded-lg border border-green-50 hover:shadow-md hover:border-gray-300 transition-all duration-200 overflow-hidden">
+    <div className="p-6 bg-white shadow-sm rounded-lg border border-green-50 hover:shadow-xl hover:border-green-100 transition-all duration-200 overflow-hidden">
       <div className="flex items-start justify-between mb-2">
         <h3 className="font-semibold text-gray-900 text-lg pr-2 truncate">{post.title}</h3>
       </div>
@@ -30,7 +30,7 @@ const PostCard = ({ post, users, onEdit, onDelete }: PostCardProps) => {
           {user ? (
             <Link
               to={`/users/@${user.username}`}
-              className="font-medium truncate px-1 rounded transition-transform duration-150 hover:bg-blue-50 hover:scale-[1.03]"
+              className="font-medium truncate px-1 rounded transition-transform duration-150 hover:bg-green-50 hover:px-2 hover:py-0.5 hover:scale-[1.03]"
               title={`${user.name} profiline git`}
             >
               {user.name}

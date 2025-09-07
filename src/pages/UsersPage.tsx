@@ -41,7 +41,12 @@ const UsersPage = () => {
   const handleCreateUser = async (userData: Omit<User, "id">) => {
     try {
       const newUser = await createUser(userData);
-      setUsers((prev) => [...prev, newUser]);
+      setUsers((prev) => {
+        const maxId = prev.reduce((max, u) => (u.id > max ? u.id : max), 0);
+        const nextId = maxId + 1;
+        const userToAdd: User = { ...newUser, id: nextId };
+        return [...prev, userToAdd];
+      });
       setShowForm(false);
       setHighlightCount(true);
       setTimeout(() => setHighlightCount(false), 2000);
