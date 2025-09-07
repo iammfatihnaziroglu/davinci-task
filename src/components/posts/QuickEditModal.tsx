@@ -1,6 +1,8 @@
 import { useState } from "react";
 import type { Post } from "../../types/post";
 import { updatePost } from "../../services/postService";
+import { useNotification } from "../../hooks/useNotification";
+import Notification from "../common/Notification";
 
 interface QuickEditModalProps {
   post: Post;
@@ -12,6 +14,7 @@ interface QuickEditModalProps {
 const QuickEditModal = ({ post, isOpen, onClose, onUpdate }: QuickEditModalProps) => {
   const [title, setTitle] = useState(post.title);
   const [loading, setLoading] = useState(false);
+  const { notification, showSuccess, showError, hideNotification } = useNotification();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,10 +24,11 @@ const QuickEditModal = ({ post, isOpen, onClose, onUpdate }: QuickEditModalProps
     try {
       const updatedPost = await updatePost(post.id, { title: title.trim() });
       onUpdate(updatedPost);
+      showSuccess("Post başlığı başarıyla güncellendi!");
       onClose();
     } catch (error) {
       console.error("Post güncellenirken hata oluştu:", error);
-      alert("Post güncellenirken hata oluştu!");
+      showError("Post güncellenirken hata oluştu!");
     } finally {
       setLoading(false);
     }
@@ -83,6 +87,13 @@ const QuickEditModal = ({ post, isOpen, onClose, onUpdate }: QuickEditModalProps
           </div>
         </form>
       </div>
+      
+      <Notification
+        message={notification.message}
+        type={notification.type}
+        isVisible={notification.isVisible}
+        onClose={hideNotification}
+      />
     </div>
   );
 };
