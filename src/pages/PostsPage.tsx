@@ -137,7 +137,7 @@ const PostsPage = () => {
                   />
                 </svg>
               </div>
-              <div className="flex flex-col justify-center items-center">
+              <div className="hidden sm:flex flex-col justify-center items-center">
                 <h1 className="text-xl font-semibold text-center text-gray-900 mb-0.5">
                   Post Yönetimi
                 </h1>
@@ -145,6 +145,12 @@ const PostsPage = () => {
                   Postları görüntüle ve yönet
                 </p>
               </div>
+            </div>
+
+            {/* Mobile-only right side: toplam post */}
+            <div className="flex items-center sm:hidden">
+              <span className="text-sm text-gray-600">Toplam Post:</span>
+              <span className="ml-1 text-green-600 font-bold text-base">{loading ? "..." : posts.length}</span>
             </div>
 
             <div className="hidden sm:flex items-center space-x-4 cursor-default">
