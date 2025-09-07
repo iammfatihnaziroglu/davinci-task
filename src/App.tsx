@@ -9,7 +9,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/users" element={<UsersPage />} />
+        <Route path="/users/:username" element={<UsersPage />} />
         <Route path="/posts" element={<PostsPage />} />
+        <Route path="/posts/:username" element={<PostsPage />} />
       </Routes>
     </Router>
   );

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import UserList from "../components/users/UserList";
 import UserForm from "../components/users/UserForm";
@@ -12,6 +12,8 @@ const UsersPage = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [showForm, setShowForm] = useState<boolean>(false);
   const [editingUser, setEditingUser] = useState<User | undefined>(undefined);
+  const { username } = useParams();
+
 
   const { notification, showSuccess, showError, hideNotification } = useNotification();
 
@@ -167,6 +169,7 @@ const UsersPage = () => {
           loading={loading}
           onEditUser={handleEditUser}
           onAddUser={handleAddUser}
+          initialUsername={username}
         />
       </div>
 

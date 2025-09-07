@@ -4,7 +4,7 @@ interface UserCardProps {
   user: User;
   onEdit: (user: User) => void;
   onDelete: (id: number) => void;
-  onViewPosts: (userId: number) => void;
+  onViewPosts: (user: User) => void;
 }
 
 const UserCard = ({ user, onEdit, onDelete, onViewPosts }: UserCardProps) => {
@@ -31,7 +31,7 @@ const UserCard = ({ user, onEdit, onDelete, onViewPosts }: UserCardProps) => {
       
       <div className="grid grid-cols-3 gap-2">
         <button
-          onClick={() => onViewPosts(user.id)}
+          onClick={() => onViewPosts(user)}
           className="px-2 py-1.5 bg-blue-50/30 text-blue-700 text-xs font-medium rounded hover:bg-blue-200 hover:text-black border border-blue-200 hover:border-blue-300 focus:outline-none focus:ring-1 focus:ring-blue-200 focus:ring-offset-1 transition-all duration-200 flex items-center justify-center space-x-1.5"
         >
           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -1,4 +1,4 @@
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams, useNavigate, useParams } from "react-router-dom";
 import type { Post } from "../../types/post";
 import type { User } from "../../types/user";
 import PostCard from "./PostCard";
@@ -16,9 +16,14 @@ interface PostListProps {
 const PostList = ({ posts, users, loading, onAddPost, onEditPost, onDeletePost }: PostListProps) => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { username } = useParams();
 
-  const userId = searchParams.get('userId');
-  const filteredPosts = userId ? posts.filter(post => post.userId === parseInt(userId)) : posts;
+  const userIdFromQuery = searchParams.get('userId');
+  const normalizedUsername = username ? (username.startsWith('@') ? username.slice(1) : username) : undefined;
+  const selectedUserByUsername = normalizedUsername ? users.find(u => u.username.toLowerCase() === normalizedUsername.toLowerCase()) : undefined;
+  const selectedUserById = userIdFromQuery ? users.find(u => u.id === parseInt(userIdFromQuery)) : undefined;
+  const selectedUserEffective = selectedUserByUsername ?? selectedUserById ?? null;
+  const filteredPosts = selectedUserEffective ? posts.filter(post => post.userId === selectedUserEffective.id) : posts;
 
   if (loading) {
     return (
@@ -29,30 +34,35 @@ const PostList = ({ posts, users, loading, onAddPost, onEditPost, onDeletePost }
     );
   }
 
-  const selectedUser = userId ? users.find(user => user.id === parseInt(userId)) : null;
+  const selectedUser = selectedUserEffective;
 
   return (
     <div>
-      {userId && selectedUser && (
+      {selectedUser && (
         <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded">
-          <h3 className="font-bold text-green-800">
-            {selectedUser.name} kullanıcısının postları (Toplam {filteredPosts.length} Post)
+          <h3 className="font-bold text-green-800 leading-snug">
+            {selectedUser.name} kullanıcısının postları
           </h3>
-          <p className="text-sm text-green-600">
-            Sadece bu kullanıcının postları gösteriliyor. Tüm postları görmek için filtreyi kaldırın.
-          </p>
+          <div className="mt-1 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <p className="text-sm text-green-700">
+              Toplam <span className="font-semibold text-green-800">{filteredPosts.length}</span> Post
+            </p>
+            <p className="text-sm text-green-600">
+              Sadece bu kullanıcının postları gösteriliyor.
+            </p>
+          </div>
         </div>
       )}
 
-      <div className="mb-4 flex justify-between items-center">
-        <h2 className="text-2xl font-medium text-gray-600">
+      <div className="mb-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+        <h2 className="text-2xl font-medium text-gray-600 leading-snug">
           Post Listesi
         </h2>
-        <div className="flex flex-wrap gap-2">
-          {userId && (
+        <div className="flex w-full sm:w-auto flex-col sm:flex-row gap-2">
+          {selectedUser && (
             <button
               onClick={() => navigate('/posts')}
-              className="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors flex items-center space-x-2"
+              className="w-full sm:w-auto bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors flex items-center justify-center space-x-2"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -63,7 +73,7 @@ const PostList = ({ posts, users, loading, onAddPost, onEditPost, onDeletePost }
           
           <button
             onClick={onAddPost}
-            className="group flex items-center space-x-2 bg-gray-200 text-gray-800 hover:text-white transition-all duration-200 px-3 py-2 rounded-md hover:bg-green-500 border border-gray-100 hover:border-green-100"
+            className="w-full sm:w-auto group flex items-center justify-center space-x-2 bg-gray-200 text-gray-800 hover:text-white transition-all duration-200 px-3 py-2 rounded-md hover:bg-green-500 border border-gray-100 hover:border-green-100"
           >
             <svg
               className="w-5 h-5 text-gray-600 group-hover:text-white"
@@ -104,10 +114,10 @@ const PostList = ({ posts, users, loading, onAddPost, onEditPost, onDeletePost }
               </svg>
             </div>
             <h3 className="text-lg font-medium text-gray-900 mb-2">
-              {userId ? 'Bu kullanıcının henüz postu bulunmuyor' : 'Henüz post bulunmuyor'}
+              {selectedUser ? 'Bu kullanıcının henüz postu bulunmuyor' : 'Henüz post bulunmuyor'}
             </h3>
             <p className="text-sm text-gray-500">
-              {userId ? 'İlk postu oluşturmak için yukarıdaki butonu kullanın.' : 'İlk postu oluşturmak için yukarıdaki butonu kullanın.'}
+              {selectedUser ? 'İlk postu oluşturmak için yukarıdaki butonu kullanın.' : 'İlk postu oluşturmak için yukarıdaki butonu kullanın.'}
             </p>
           </div>
         </div>

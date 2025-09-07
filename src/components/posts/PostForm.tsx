@@ -55,7 +55,7 @@ const PostForm = ({ post, users, onSubmit, onCancel }: PostFormProps) => {
     clearErrors();
   }, [post, clearErrors]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -127,14 +127,15 @@ const PostForm = ({ post, users, onSubmit, onCancel }: PostFormProps) => {
             <label htmlFor="title" className="block text-sm font-medium text-gray-700">
               Başlık
             </label>
-            <input
-              type="text"
+            <textarea
               id="title"
               name="title"
               value={formData.title}
               onChange={handleChange}
               required
-              className={`mt-1 block w-full px-3 py-2 text-base border rounded-md focus:outline-none focus:ring-1 focus:ring-offset-1 transition-colors ${
+              rows={3}
+              maxLength={100}
+              className={`mt-1 block w-full px-3 py-2 text-base border rounded-md focus:outline-none focus:ring-1 focus:ring-offset-1 transition-colors leading-relaxed min-h-[84px] ${
                 getFieldError('title') && isFieldTouched('title')
                   ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
                   : 'border-gray-300 focus:ring-green-500 focus:border-green-500 hover:border-gray-400'
