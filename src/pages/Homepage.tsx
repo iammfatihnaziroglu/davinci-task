@@ -93,6 +93,15 @@ const Homepage = () => {
         <p className="text-sm text-gray-500">
           Modern ve kullanıcı dostu arayüz ile veri yönetimi
         </p>
+        <p className="text-xs mt-2">
+          <span className="font-semibold text-gray-700">Mehmet Fatih Nazıroğlu</span> •
+          <a
+            href="mailto:m.fatihnaziroglu@gmail.com"
+            className="ml-1 text-blue-900 hover:underline"
+          >
+            m.fatihnaziroglu@gmail.com
+          </a>
+        </p>
       </div>
     </div>
   );
