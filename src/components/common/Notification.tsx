@@ -63,7 +63,7 @@ const Notification = ({ message, type, isVisible, onClose, duration = 3000 }: No
   };
 
   return (
-    <div className={`fixed top-4 right-4 z-50 max-w-sm w-full border-l-4 p-4 rounded-lg shadow-lg transform transition-all duration-300 ease-in-out ${getTypeStyles()}`}>
+    <div className={`fixed top-24 left-1/2 -translate-x-1/2 z-50 w-full max-w-md border-l-4 p-4 rounded-lg shadow-lg transform transition-all duration-300 ease-in-out ${getTypeStyles()}`}>
       <div className="flex items-center">
         <div className="mr-3">{getIcon()}</div>
         <p className="flex-1 text-sm font-medium">{message}</p>
