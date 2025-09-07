@@ -22,7 +22,7 @@ export const createPost = async (post: Omit<Post, 'id'>): Promise<Post> => {
 };
 
 export const updatePost = async (id: number, post: Partial<Post>): Promise<Post> => {
-  const response = await api.put<Post>(`/posts/${id}`, post);
+  const response = await api.patch<Post>(`/posts/${id}`, post);
   return response.data;
 };
 

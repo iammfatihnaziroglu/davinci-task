@@ -2,7 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import UserList from "../components/users/UserList";
 import UserForm from "../components/users/UserForm";
-import { getUsers, createUser, updateUser } from "../services/userService";
+import { getUsers, createUser, updateUser, deleteUser } from "../services/userService";
 import type { User } from "../types/user";
 import { useNotification } from "../hooks/useNotification";
 import Notification from "../components/common/Notification";
@@ -53,7 +53,7 @@ const UsersPage = () => {
     try {
       const updatedUser = await updateUser(editingUser.id, userData);
       setUsers((prev) =>
-        prev.map((user) => (user.id === editingUser.id ? updatedUser : user))
+        prev.map((user) => (user.id === editingUser.id ? { ...user, ...updatedUser } : user))
       );
       setEditingUser(undefined);
       setShowForm(false);
@@ -173,6 +173,16 @@ const UsersPage = () => {
           onEditUser={handleEditUser}
           onAddUser={handleAddUser}
           initialUsername={username}
+          onDeleteUser={async (id: number) => {
+            try {
+              await deleteUser(id);
+              setUsers(prev => prev.filter(u => u.id !== id));
+              showSuccess("Kullanıcı başarıyla silindi!");
+            } catch (err) {
+              console.error(err);
+              showError("Kullanıcı silinirken hata oluştu. Lütfen tekrar deneyin.");
+            }
+          }}
         />
       </div>
 

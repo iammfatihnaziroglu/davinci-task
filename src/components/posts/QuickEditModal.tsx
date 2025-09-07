@@ -23,7 +23,7 @@ const QuickEditModal = ({ post, isOpen, onClose, onUpdate }: QuickEditModalProps
     setLoading(true);
     try {
       const updatedPost = await updatePost(post.id, { title: title.trim() });
-      onUpdate(updatedPost);
+      onUpdate({ ...post, ...updatedPost });
       showSuccess("Post başlığı başarıyla güncellendi!");
       onClose();
     } catch (error) {
@@ -66,7 +66,7 @@ const QuickEditModal = ({ post, isOpen, onClose, onUpdate }: QuickEditModalProps
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 border-gray-300"
+                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 border-gray-300"
                 placeholder="Post başlığını girin..."
                 required
               />
@@ -76,7 +76,7 @@ const QuickEditModal = ({ post, isOpen, onClose, onUpdate }: QuickEditModalProps
               <button
                 type="submit"
                 disabled={loading || !title.trim()}
-                className="w-full sm:w-auto bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                className="w-full sm:w-auto bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
               >
                 {loading ? "Güncelleniyor..." : "Güncelle"}
               </button>

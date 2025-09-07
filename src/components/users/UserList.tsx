@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import type { User } from "../../types/user";
 import type { Post } from "../../types/post";
-import { deleteUser } from "../../services/userService";
 import { getPostsByUserId } from "../../services/postService";
 import UserCard from "./UserCard";
 import QuickEditModal from "../posts/QuickEditModal";
@@ -15,9 +14,10 @@ interface UserListProps {
   onEditUser: (user: User) => void;
   onAddUser: () => void;
   initialUsername?: string;
+  onDeleteUser: (id: number) => Promise<void> | void;
 }
 
-const UserList = ({ users, loading, onEditUser, onAddUser, initialUsername }: UserListProps) => {
+const UserList = ({ users, loading, onEditUser, onAddUser, initialUsername, onDeleteUser }: UserListProps) => {
   const navigate = useNavigate();
   const [error, setError] = useState<string>("");
 
@@ -33,16 +33,11 @@ const UserList = ({ users, loading, onEditUser, onAddUser, initialUsername }: Us
 
   const handleDeleteUser = async (id: number) => {
     if (!confirm("Bu kullanıcıyı silmek istediğinizden emin misiniz?")) return;
-
     try {
-      await deleteUser(id);
-      showSuccess("Kullanıcı başarıyla silindi!");
-      // UsersPage will handle the users state update
-      window.location.reload(); // Simple refresh for now
+      await onDeleteUser(id);
     } catch (err) {
       console.error(err);
-      const errorMessage =
-        "Kullanıcı silinirken hata oluştu. Lütfen tekrar deneyin.";
+      const errorMessage = "Kullanıcı silinirken hata oluştu. Lütfen tekrar deneyin.";
       setError(errorMessage);
       showError(errorMessage);
     }

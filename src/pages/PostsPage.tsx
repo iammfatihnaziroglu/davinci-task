@@ -81,7 +81,7 @@ const PostsPage = () => {
     if (!editingPost) return;
     try {
       const updated = await updatePost(editingPost.id, postData);
-      setPosts(prev => prev.map(p => p.id === editingPost.id ? updated : p));
+      setPosts(prev => prev.map(p => p.id === editingPost.id ? { ...p, ...updated } : p));
       setEditingPost(undefined);
       setShowForm(false);
       showSuccess("Post başarıyla güncellendi!");

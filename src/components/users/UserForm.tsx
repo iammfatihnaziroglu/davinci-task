@@ -10,8 +10,14 @@ interface UserFormProps {
   onCancel: () => void;
 }
 
+type UserFormState = {
+  name: string;
+  username: string;
+  email: string;
+};
+
 const UserForm = ({ user, onSubmit, onCancel }: UserFormProps) => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<UserFormState>({
     name: "",
     username: "",
     email: "",

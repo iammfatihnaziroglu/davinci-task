@@ -17,7 +17,7 @@ export const createUser = async (user: Omit<User, 'id'>): Promise<User> => {
 };
 
 export const updateUser = async (id: number, user: Partial<User>): Promise<User> => {
-  const response = await api.put<User>(`/users/${id}`, user);
+  const response = await api.patch<User>(`/users/${id}`, user);
   return response.data;
 };
 

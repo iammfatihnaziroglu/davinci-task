@@ -13,8 +13,13 @@ interface PostFormProps {
   onCancel: () => void;
 }
 
+type PostFormState = {
+  userId: number;
+  title: string;
+};
+
 const PostForm = ({ post, users, defaultUser, onSubmit, onCancel }: PostFormProps) => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<PostFormState>({
     userId: 0,
     title: "",
   });
