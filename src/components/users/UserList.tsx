@@ -132,16 +132,16 @@ const UserList = ({ users, loading, onEditUser, onAddUser, initialUsername, onDe
   return (
     <div>
       <div className={`mb-4 flex items-center ${showUserPosts ? 'justify-center' : 'justify-between'}`}>
-        <h2 className={`text-2xl ${showUserPosts ? 'font-bold text-center' : 'font-medium'} text-gray-600`}>
+        <h2 className={`sm:text-2xl text-xl ${showUserPosts ? 'font-bold text-center' : 'font-medium'} text-gray-600`}>
           {showUserPosts && selectedUser ? `${selectedUser.name} (@${selectedUser.username})` : 'Kullanıcı Listesi'}
         </h2>
         {!showUserPosts && (
           <button
             onClick={onAddUser}
-            className="group flex items-center space-x-2 bg-gray-200 text-gray-800 hover:text-white transition-all duration-200 px-3 py-2 rounded-md hover:bg-blue-500 border border-gray-100 hover:border-blue-100"
+            className="group w-44 sm:w-auto flex items-center justify-center space-x-1 sm:space-x-2 bg-gray-200 text-gray-800 hover:text-white transition-all duration-200 px-0 sm:px-3 py-1.75 rounded-md hover:bg-blue-500 border border-gray-100 hover:border-blue-100"
           >
             <svg
-              className="w-5 h-5 text-gray-600 group-hover:text-white"
+              className="sm:w-5 sm:h-5 w-4 h-4 text-gray-600 group-hover:text-white"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
