@@ -26,7 +26,7 @@ const UserList = ({ users, loading, onEditUser, onAddUser, initialUsername, onDe
   const [showUserPosts, setShowUserPosts] = useState<boolean>(false);
   const [editingPost, setEditingPost] = useState<Post | undefined>(undefined);
   const [showQuickEdit, setShowQuickEdit] = useState<boolean>(false);
-  const selectedUser = selectedUserId ? users.find(u => u.id === selectedUserId) : undefined;
+  const selectedUser = selectedUserId !== undefined ? users.find(u => u.id === selectedUserId) : undefined;
 
   const { notification, showSuccess, showError, hideNotification } =
     useNotification();
