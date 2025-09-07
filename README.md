@@ -1,69 +1,105 @@
-# React + TypeScript + Vite
+## Davinci Task — React + TypeScript + Tailwindcss + Vite
+### Frontend Dev. Phase1
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Canlı Demo: [https://davincitask.vercel.app](https://davincitask.vercel.app)
 
-Currently, two official plugins are available:
+React + TypeScript + Tailwindcss + Vite ile geliştirilen bir frontend uygulamasıdır. JSONPlaceholder API’sinden kullanıcı ve gönderi verilerini çeker, listeler ve istemci tarafında CRUD (oluşturma, güncelleme, silme) işlemlerini destekler. Arayüz basit ve erişilebilir olacak şekilde tasarlanmıştır; kod tabanı TypeScript ve ESLint kurallarıyla uyumludur.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### İçindekiler
+- Kurulum ve Çalıştırma
+- Özellikler
+- API ve Veri Modeli
+- Geliştirme Script’leri
+- Lint ve Kod Kalitesi
+- Deploy (Vercel)
 
-## Expanding the ESLint configuration
+## Kurulum ve Çalıştırma
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Gereksinimler:
+- Node.js 18+ ve npm 9+
+- Git
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Kurulum:
+```bash
+git clone https://github.com/iammfatihnaziroglu/davinci-task.git
+cd davinci-task
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Geliştirme sunucusu:
+```bash
+npm run dev
+# Uygulama: http://localhost:3000
 ```
+
+Lint Kontrolü:
+```bash
+npm run lint
+```
+
+Prod build:
+```bash
+npm run build
+# Çıktı: ./dist
+```
+
+Yerel önizleme (prod build sonrası):
+```bash
+npm run preview
+# Varsayılan: http://localhost:4173
+```
+
+## Özellikler
+- Ana sayfa `Homepage`: Kullanıcılar ve Gönderiler sayfalarına bağlantılar
+- Kullanıcı Listesi: `id`, `name`, `username`, `email`
+- Gönderi Listesi: `userId`, `id`, `title`
+- İlişki: Gönderiler kullanıcıya `userId` ile bağlı
+- CRUD: Kullanıcı ve gönderiler için ekleme, düzenleme, silme (istemci tarafında, durum yönetimiyle)
+- Kısmi güncelleme: `PATCH` ile minimal payload göndererek hızlı "Quick Edit" akışı
+- Yeniden yükleme olmadan silme: Optimistic UI ile anında listeden düşürme, bildirim desteği
+- Form doğrulama: Basit kurallar ve geri bildirimler
+- Bildirimler: Başarılı/hata durumları için kullanıcı dostu uyarılar
+- UI/UX: Temiz ve anlaşılır arayüz (TailwindCSS v4.1)
+  - ID ve `userId` badge gösterimi (renkli küçük rozetler)
+  - Hover durumlarında buton ve kartlarda görsel geri bildirim
+  - Form validation ve error 
+- TypeScript tipleri ve ESLint uyumu
+
+## Mimari ve Dizin Yapısı
+```
+src/
+  components/
+    posts/
+    users/
+    common/
+  hooks/
+  pages/
+  services/
+  types/
+```
+- `components/`: Tekil bileşenler (kartlar, listeler, formlar, modallar)
+- `hooks/`: Özel hook’lar (`useFormValidation`, `useNotification`)
+- `pages/`: Sayfa düzeyindeki bileşenler (`Homepage`, `UsersPage`, `PostsPage`)
+- `services/`: API erişimi ve istek soyutlamaları (`userService`, `postService`)
+- `types/`: Uygulama tür tanımları (`user.ts`, `post.ts`)
+
+## API ve Veri Modeli
+- Kaynak: `https://jsonplaceholder.typicode.com/`
+- Uç noktalar: `/users`, `/posts`
+- Not: JSONPlaceholder yazma işlemlerini gerçek DB’ye yansıtmaz. Bu projede CRUD işlemleri istemci tarafında (local state) yönetilir; uzak API çağrıları örnek veri çekimi için kullanılır.
+
+## Geliştirme Script’leri
+- `npm run dev`: Vite geliştirme sunucusu (port: 3000)
+- `npm run build`: TypeScript build + üretim derlemesi
+- `npm run preview`: Üretim derlemesini yerel sunucuda önizleme
+- `npm run lint`: ESLint ile kod kalitesi kontrolü
+
+## Lint ve Kod Kalitesi
+- Proje ESLint ile yapılandırılmıştır. Kurallara uyum için:
+```bash
+npm run lint
+```
+Hedef: Uygulamada lint hatası bırakmamak.
+
+
+Ek not: Görev metninde istenen gereksinimler (sayfalar, listeler, CRUD, ilişki, tipler, lint uyumu ve basit UI) bu projede uygulanmıştır. Canlı demo linki mevcutsa buraya eklenebilir.
