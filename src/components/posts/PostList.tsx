@@ -38,19 +38,53 @@ const PostList = ({ posts, users, loading, onAddPost, onEditPost, onDeletePost }
 
   return (
     <div>
-      {selectedUser && (
-        <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded">
-          <h3 className="font-bold text-green-800 leading-snug">
-            {selectedUser.name} kullanıcısının postları
-          </h3>
-          <div className="mt-1 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-            <p className="text-sm text-green-700">
-              Toplam <span className="font-semibold text-green-800">{filteredPosts.length}</span> Post
-            </p>
-            <p className="text-sm text-green-600">
-              Sadece bu kullanıcının postları gösteriliyor.
-            </p>
-          </div>
+        {selectedUser && (
+        <div className="mb-4 p-5 bg-green-50 border border-green-200 rounded-lg">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+            <div className="flex-1">
+               <div className="flex flex-col sm:flex-row items-baseline gap-2 mb-2">
+                 <h3 className="text-2xl font-bold text-green-900">{selectedUser.name}</h3>
+                 <span className="text-green-700 text-base font-medium">@{selectedUser.username}</span>
+               </div>
+                <div className="space-y-2">
+                  <p className="text-sm text-green-700">Bu listede <span className="font-medium">{selectedUser.name}</span> kullanıcısına ait postlar gösteriliyor.</p>
+                  <div className="hidden sm:block">
+                    <div className="w-1/3 h-px bg-green-200 my-2"></div>
+                    <div className="flex items-center gap-1.5 text-sm text-green-700">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                      </svg>
+                      <span>Tüm postları görmek için filtreyi kaldırın</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center">
+                <div className="sm:hidden inline-flex items-center px-3 py-1.5 rounded-full bg-green-100 text-green-800 border border-green-200">
+                  <svg className="w-4 h-4 mr-1.5 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  <span className="text-sm font-medium">
+                    Paylaştığı Post Sayısı: <span className="font-bold text-green-900">{filteredPosts.length}</span>
+                  </span>
+                </div>
+                <div className="hidden sm:flex items-center bg-green-100 px-4 py-2 rounded-lg border border-green-200">
+                  <svg className="w-5 h-5 mr-1.5 mt-0.25 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  <span className="text-green-800 font-medium whitespace-nowrap">Paylaştığı Post Sayısı: </span>
+                  <span className="ml-1.5 text-xl font-bold text-green-700 tracking-tight">{filteredPosts.length}</span>
+                </div>
+             </div>
+           </div>
+           <div className="sm:hidden mt-3 pt-3 border-t border-green-200">
+             <p className="flex items-center gap-1.5 text-xs text-green-700">
+               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+               </svg>
+               <span>Tüm postları görmek için filtreyi kaldırın</span>
+             </p>
+           </div>
         </div>
       )}
 
@@ -61,7 +95,7 @@ const PostList = ({ posts, users, loading, onAddPost, onEditPost, onDeletePost }
         <div className="flex gap-2">
           <button
             onClick={onAddPost}
-            className="group w-44 sm:w-auto flex items-center justify-center space-x-1 sm:space-x-2 bg-gray-200 text-gray-800 hover:text-white transition-all duration-200 px-0 sm:px-3 py-1.75 rounded-md hover:bg-blue-500 border border-gray-100 hover:border-blue-100"
+            className="group w-44 sm:w-auto flex items-center justify-center space-x-1 sm:space-x-2 bg-gray-200 text-gray-800 hover:text-white transition-all duration-200 px-0 sm:px-3 py-1.75 rounded-md hover:bg-green-500 border border-gray-100 hover:border-green-100"
           >
             <svg
               className="sm:w-5 sm:h-5 w-4 h-4 text-gray-600 group-hover:text-white"
@@ -81,12 +115,12 @@ const PostList = ({ posts, users, loading, onAddPost, onEditPost, onDeletePost }
           {selectedUser && (
             <button
               onClick={() => navigate('/posts')}
-              className="hidden sm:inline-flex bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors items-center justify-center space-x-2"
+              className="group inline-flex sm:inline-flex items-center justify-center sm:space-x-2 bg-gray-600 text-gray-100 hover:text-white px-3 sm:px-4 py-2 rounded-md border border-gray-900 hover:bg-gray-900 hover:border-gray-700 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all duration-200"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="block w-4 h-4 transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
               </svg>
-              <span>Filtreyi Kaldır</span>
+              <span className="hidden sm:inline">Filtreyi Kaldır</span>
             </button>
           )}
         </div>

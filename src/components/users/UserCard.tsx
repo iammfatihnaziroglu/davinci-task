@@ -9,7 +9,7 @@ interface UserCardProps {
 
 const UserCard = ({ user, onEdit, onDelete, onViewPosts }: UserCardProps) => {
   return (
-    <div className="p-6 bg-white shadow-sm rounded-lg border border-blue-50 hover:shadow-md hover:border-gray-300 transition-all duration-200">
+    <div className="p-6 bg-white shadow-sm rounded-lg border border-blue-50 hover:shadow-xl hover:border-blue-100 transition-all duration-200">
       <div className="flex items-start justify-between mb-2">
         <h3 className="font-semibold text-gray-900 text-lg pr-2 truncate">{user.name}</h3>
       </div>
