@@ -12,6 +12,7 @@ const UsersPage = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [showForm, setShowForm] = useState<boolean>(false);
   const [editingUser, setEditingUser] = useState<User | undefined>(undefined);
+  const [highlightCount, setHighlightCount] = useState<boolean>(false);
   const { username } = useParams();
 
 
@@ -37,6 +38,8 @@ const UsersPage = () => {
       const newUser = await createUser(userData);
       setUsers((prev) => [...prev, newUser]);
       setShowForm(false);
+      setHighlightCount(true);
+      setTimeout(() => setHighlightCount(false), 2000);
       showSuccess("Kullanıcı başarıyla oluşturuldu!");
     } catch (err) {
       console.error(err);
@@ -131,7 +134,7 @@ const UsersPage = () => {
 
             <div className="flex items-center sm:hidden">
               <span className="text-sm text-gray-600">Toplam Kullanıcı:</span>
-              <span className="ml-1 text-blue-600 font-bold text-base">{loading ? "..." : users.length}</span>
+              <span className={`ml-1 text-blue-600 font-bold text-base transition-all duration-500 ${highlightCount ? 'animate-bounce bg-blue-100 px-2 py-1 rounded-md' : ''}`}>{loading ? "..." : users.length}</span>
             </div>
 
             <div className="hidden sm:flex items-center space-x-4 cursor-default">
@@ -154,7 +157,7 @@ const UsersPage = () => {
                 <span className="font-medium text-gray-700 group-hover:text-blue-600">
                   Toplam Kullanıcı:
                 </span>
-                <span className="text-blue-600 font-bold text-base">
+                <span className={`text-blue-600 font-bold text-base transition-all duration-500 ${highlightCount ? 'animate-bounce bg-blue-100 px-2 py-1 rounded-md' : ''}`}>
                   {loading ? "..." : users.length}
                 </span>
               </div>

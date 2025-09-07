@@ -8,11 +8,12 @@ import Notification from "../common/Notification";
 interface PostFormProps {
   post?: Post;
   users: User[];
+  defaultUser?: User;
   onSubmit: (post: Omit<Post, 'id'>) => void;
   onCancel: () => void;
 }
 
-const PostForm = ({ post, users, onSubmit, onCancel }: PostFormProps) => {
+const PostForm = ({ post, users, defaultUser, onSubmit, onCancel }: PostFormProps) => {
   const [formData, setFormData] = useState({
     userId: 0,
     title: "",
@@ -51,9 +52,21 @@ const PostForm = ({ post, users, onSubmit, onCancel }: PostFormProps) => {
         userId: post.userId,
         title: post.title,
       });
+    } else if (defaultUser) {
+      // Yeni post eklerken default kullanıcı varsa onu seç
+      setFormData({
+        userId: defaultUser.id,
+        title: "",
+      });
+    } else {
+      // Hiçbiri yoksa sıfırla
+      setFormData({
+        userId: 0,
+        title: "",
+      });
     }
     clearErrors();
-  }, [post, clearErrors]);
+  }, [post, defaultUser, clearErrors]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -93,6 +106,11 @@ const PostForm = ({ post, users, onSubmit, onCancel }: PostFormProps) => {
           <div>
             <label htmlFor="userId" className="block text-sm font-medium text-gray-700">
               Kullanıcı
+              {defaultUser && !post && (
+                <span className="ml-2 text-xs text-green-600 font-normal">
+                  ( Kullanıcı Değiştirilemez. Değiştirmek için filtreyi kaldırın.)
+                </span>
+              )}
             </label>
             <select
               id="userId"
@@ -100,18 +118,31 @@ const PostForm = ({ post, users, onSubmit, onCancel }: PostFormProps) => {
               value={formData.userId}
               onChange={handleChange}
               required
+              disabled={defaultUser && !post}
               className={`mt-1 block w-full px-3 py-2 text-base border rounded-md focus:outline-none focus:ring-1 focus:ring-offset-1 transition-colors ${
                 getFieldError('userId') && isFieldTouched('userId')
                   ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                  : defaultUser && !post
+                  ? 'border-green-300 bg-green-50 text-green-700 cursor-not-allowed'
                   : 'border-gray-300 focus:ring-green-500 focus:border-green-500 hover:border-gray-400'
               }`}
             >
-              <option value={0}>Kullanıcı seçin</option>
-              {users.map((user) => (
-                <option key={user.id} value={user.id}>
-                  {user.name} ({user.username})
+              {defaultUser && !post ? (
+                // URL'deki kullanıcı varsa sadece o kullanıcıyı göster
+                <option value={defaultUser.id}>
+                  {defaultUser.name} - Otomatik seçildi
                 </option>
-              ))}
+              ) : (
+                // Normal durumda tüm kullanıcıları göster
+                <>
+                  <option value={0}>Kullanıcı seçin</option>
+                  {users.map((user) => (
+                    <option key={user.id} value={user.id}>
+                      {user.name} ({user.username})
+                    </option>
+                  ))}
+                </>
+              )}
             </select>
             {getFieldError('userId') && isFieldTouched('userId') && (
               <p className="mt-1 text-sm text-red-600 flex items-center">

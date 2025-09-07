@@ -182,7 +182,7 @@ const UserList = ({ users, loading, onEditUser, onAddUser, initialUsername }: Us
         <div className="bg-white rounded-lg p-4 sm:p-6 border border-gray-200">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
             <h2 className="text-lg sm:text-xl font-semibold">
-              Paylaştığı Post Sayısı: {selectedUserPosts.length}
+              Paylaştığı Post Sayısı: <span className="text-blue-700 font-bold">{selectedUserPosts.length}</span>
             </h2>
             <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
               <button

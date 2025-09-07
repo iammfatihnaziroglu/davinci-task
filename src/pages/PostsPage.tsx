@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import PostList from "../components/posts/PostList";
 import PostForm from "../components/posts/PostForm";
@@ -15,6 +15,8 @@ const PostsPage = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [showForm, setShowForm] = useState<boolean>(false);
   const [editingPost, setEditingPost] = useState<Post | undefined>(undefined);
+  const [highlightCount, setHighlightCount] = useState<boolean>(false);
+  const { username } = useParams();
   const { notification, showSuccess, showError, hideNotification } = useNotification();
 
   useEffect(() => {
@@ -43,6 +45,14 @@ const PostsPage = () => {
     setShowForm(true);
   };
 
+  // URL'den username varsa, o kullanıcıyı bul
+  const getDefaultUser = (): User | undefined => {
+    if (!username || users.length === 0) return undefined;
+    
+    const normalizedUsername = username.startsWith('@') ? username.slice(1) : username;
+    return users.find(u => u.username.toLowerCase() === normalizedUsername.toLowerCase());
+  };
+
   const handleEditPost = (post: Post) => {
     setEditingPost(post);
     setShowForm(true);
@@ -58,6 +68,8 @@ const PostsPage = () => {
       const newPost = await createPost(postData);
       setPosts(prev => [...prev, newPost]);
       setShowForm(false);
+      setHighlightCount(true);
+      setTimeout(() => setHighlightCount(false), 2000);
       showSuccess("Post başarıyla oluşturuldu!");
     } catch (err) {
       console.error(err);
@@ -150,7 +162,7 @@ const PostsPage = () => {
             {/* Mobile-only right side: toplam post */}
             <div className="flex items-center sm:hidden">
               <span className="text-sm text-gray-600">Toplam Post:</span>
-              <span className="ml-1 text-green-600 font-bold text-base">{loading ? "..." : posts.length}</span>
+              <span className={`ml-1 text-green-600 font-bold text-base transition-all duration-500 ${highlightCount ? 'animate-bounce bg-green-100 px-2 py-1 rounded-md' : ''}`}>{loading ? "..." : posts.length}</span>
             </div>
 
             <div className="hidden sm:flex items-center space-x-4 cursor-default">
@@ -173,7 +185,7 @@ const PostsPage = () => {
                 <span className="font-medium text-gray-700 group-hover:text-green-600">
                   Toplam Post:
                 </span>
-                <span className="text-green-600 font-bold text-base">
+                <span className={`text-green-600 font-bold text-base transition-all duration-500 ${highlightCount ? 'animate-bounce bg-green-100 px-2 py-1 rounded-md' : ''}`}>
                   {loading ? "..." : posts.length}
                 </span>
               </div>
@@ -222,6 +234,7 @@ const PostsPage = () => {
               <PostForm
                 post={editingPost}
                 users={users}
+                defaultUser={editingPost ? undefined : getDefaultUser()}
                 onSubmit={editingPost ? handleUpdatePost : handleCreatePost}
                 onCancel={handleCancelForm}
               />
