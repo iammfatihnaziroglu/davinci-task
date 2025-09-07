@@ -30,7 +30,7 @@ const PostCard = ({ post, users, onEdit, onDelete }: PostCardProps) => {
           {user ? (
             <Link
               to={`/users/@${user.username}`}
-              className="font-medium truncate px-1 rounded transition-colors transition-transform duration-150 hover:bg-blue-50 hover:scale-[1.03]"
+              className="font-medium truncate px-1 rounded transition-transform duration-150 hover:bg-blue-50 hover:scale-[1.03]"
               title={`${user.name} profiline git`}
             >
               {user.name}
