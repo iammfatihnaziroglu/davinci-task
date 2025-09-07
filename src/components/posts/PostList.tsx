@@ -54,29 +54,17 @@ const PostList = ({ posts, users, loading, onAddPost, onEditPost, onDeletePost }
         </div>
       )}
 
-      <div className="mb-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
-        <h2 className="text-2xl font-medium text-gray-600 leading-snug">
+      <div className="mb-4 flex items-center justify-between">
+        <h2 className="sm:text-2xl text-xl font-medium text-gray-600">
           Post Listesi
         </h2>
-        <div className="flex w-full sm:w-auto flex-col sm:flex-row gap-2">
-          {selectedUser && (
-            <button
-              onClick={() => navigate('/posts')}
-              className="w-full sm:w-auto bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors flex items-center justify-center space-x-2"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-              </svg>
-              <span>Filtreyi Kaldır</span>
-            </button>
-          )}
-          
+        <div className="flex gap-2">
           <button
             onClick={onAddPost}
-            className="w-full sm:w-auto group flex items-center justify-center space-x-2 bg-gray-200 text-gray-800 hover:text-white transition-all duration-200 px-3 py-2 rounded-md hover:bg-green-500 border border-gray-100 hover:border-green-100"
+            className="group w-44 sm:w-auto flex items-center justify-center space-x-1 sm:space-x-2 bg-gray-200 text-gray-800 hover:text-white transition-all duration-200 px-0 sm:px-3 py-1.75 rounded-md hover:bg-blue-500 border border-gray-100 hover:border-blue-100"
           >
             <svg
-              className="w-5 h-5 text-gray-600 group-hover:text-white"
+              className="sm:w-5 sm:h-5 w-4 h-4 text-gray-600 group-hover:text-white"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -90,6 +78,17 @@ const PostList = ({ posts, users, loading, onAddPost, onEditPost, onDeletePost }
             </svg>
             <span className="font-medium">Yeni Post Ekle</span>
           </button>
+          {selectedUser && (
+            <button
+              onClick={() => navigate('/posts')}
+              className="hidden sm:inline-flex bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors items-center justify-center space-x-2"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              <span>Filtreyi Kaldır</span>
+            </button>
+          )}
         </div>
       </div>
 

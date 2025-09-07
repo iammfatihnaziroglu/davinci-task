@@ -2,7 +2,12 @@ import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import PostList from "../components/posts/PostList";
 import PostForm from "../components/posts/PostForm";
-import { getPosts, createPost, updatePost, deletePost } from "../services/postService";
+import {
+  getPosts,
+  createPost,
+  updatePost,
+  deletePost,
+} from "../services/postService";
 import { getUsers } from "../services/userService";
 import type { Post } from "../types/post";
 import type { User } from "../types/user";
@@ -17,7 +22,8 @@ const PostsPage = () => {
   const [editingPost, setEditingPost] = useState<Post | undefined>(undefined);
   const [highlightCount, setHighlightCount] = useState<boolean>(false);
   const { username } = useParams();
-  const { notification, showSuccess, showError, hideNotification } = useNotification();
+  const { notification, showSuccess, showError, hideNotification } =
+    useNotification();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,9 +54,13 @@ const PostsPage = () => {
   // URL'den username varsa, o kullanıcıyı bul
   const getDefaultUser = (): User | undefined => {
     if (!username || users.length === 0) return undefined;
-    
-    const normalizedUsername = username.startsWith('@') ? username.slice(1) : username;
-    return users.find(u => u.username.toLowerCase() === normalizedUsername.toLowerCase());
+
+    const normalizedUsername = username.startsWith("@")
+      ? username.slice(1)
+      : username;
+    return users.find(
+      (u) => u.username.toLowerCase() === normalizedUsername.toLowerCase()
+    );
   };
 
   const handleEditPost = (post: Post) => {
@@ -63,10 +73,10 @@ const PostsPage = () => {
     setEditingPost(undefined);
   };
 
-  const handleCreatePost = async (postData: Omit<Post, 'id'>) => {
+  const handleCreatePost = async (postData: Omit<Post, "id">) => {
     try {
       const newPost = await createPost(postData);
-      setPosts(prev => [...prev, newPost]);
+      setPosts((prev) => [...prev, newPost]);
       setShowForm(false);
       setHighlightCount(true);
       setTimeout(() => setHighlightCount(false), 2000);
@@ -77,11 +87,13 @@ const PostsPage = () => {
     }
   };
 
-  const handleUpdatePost = async (postData: Omit<Post, 'id'>) => {
+  const handleUpdatePost = async (postData: Omit<Post, "id">) => {
     if (!editingPost) return;
     try {
       const updated = await updatePost(editingPost.id, postData);
-      setPosts(prev => prev.map(p => p.id === editingPost.id ? { ...p, ...updated } : p));
+      setPosts((prev) =>
+        prev.map((p) => (p.id === editingPost.id ? { ...p, ...updated } : p))
+      );
       setEditingPost(undefined);
       setShowForm(false);
       showSuccess("Post başarıyla güncellendi!");
@@ -95,7 +107,7 @@ const PostsPage = () => {
     if (!confirm("Bu postu silmek istediğinizden emin misiniz?")) return;
     try {
       await deletePost(id);
-      setPosts(prev => prev.filter(p => p.id !== id));
+      setPosts((prev) => prev.filter((p) => p.id !== id));
       showSuccess("Post başarıyla silindi!");
     } catch (err) {
       console.error(err);
@@ -128,12 +140,12 @@ const PostsPage = () => {
                 </svg>
 
                 <span className="font-medium text-gray-700 group-hover:text-green-600">
-                  Ana Sayfaya
+                  Ana Sayfa
                 </span>
               </Link>
             </div>
 
-            <div className="flex items-center space-x-4 cursor-default">
+            <div className="flex items-center sm:space-x-4 cursor-default">
               <div className="group flex items-center justify-center w-10 h-10 bg-gray-50 border border-gray-100 rounded-md">
                 <svg
                   className="w-5 h-5 text-gray-500 group-hover:text-green-600"
@@ -162,7 +174,15 @@ const PostsPage = () => {
             {/* Mobile-only right side: toplam post */}
             <div className="flex items-center sm:hidden">
               <span className="text-sm text-gray-600">Toplam Post:</span>
-              <span className={`ml-1 text-green-600 font-bold text-base transition-all duration-500 ${highlightCount ? 'animate-bounce bg-green-100 px-2 py-1 rounded-md' : ''}`}>{loading ? "..." : posts.length}</span>
+              <span
+                className={`ml-1 text-green-600 font-bold text-base transition-all duration-500 ${
+                  highlightCount
+                    ? "animate-bounce bg-green-100 px-2 py-1 rounded-md"
+                    : ""
+                }`}
+              >
+                {loading ? "..." : posts.length}
+              </span>
             </div>
 
             <div className="hidden sm:flex items-center space-x-4 cursor-default">
@@ -185,7 +205,13 @@ const PostsPage = () => {
                 <span className="font-medium text-gray-700 group-hover:text-green-600">
                   Toplam Post:
                 </span>
-                <span className={`text-green-600 font-bold text-base transition-all duration-500 ${highlightCount ? 'animate-bounce bg-green-100 px-2 py-1 rounded-md' : ''}`}>
+                <span
+                  className={`text-green-600 font-bold text-base transition-all duration-500 ${
+                    highlightCount
+                      ? "animate-bounce bg-green-100 px-2 py-1 rounded-md"
+                      : ""
+                  }`}
+                >
                   {loading ? "..." : posts.length}
                 </span>
               </div>
@@ -195,7 +221,7 @@ const PostsPage = () => {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <PostList 
+        <PostList
           posts={posts}
           users={users}
           loading={loading}
@@ -207,13 +233,26 @@ const PostsPage = () => {
 
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px]" onClick={handleCancelForm} />
+          <div
+            className="absolute inset-0 bg-black/40 backdrop-blur-[1px]"
+            onClick={handleCancelForm}
+          />
           <div className="relative bg-white w-full max-w-lg rounded-xl shadow-xl border border-gray-200">
             <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <div className="w-8 h-8 rounded-md bg-green-50 flex items-center justify-center">
-                  <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.5v15m7.5-7.5h-15" />
+                  <svg
+                    className="w-4 h-4 text-green-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 4.5v15m7.5-7.5h-15"
+                    />
                   </svg>
                 </div>
                 <h3 className="text-lg font-semibold text-gray-800">
@@ -225,8 +264,18 @@ const PostsPage = () => {
                 className="p-2 rounded-md hover:bg-gray-100 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-1 focus:ring-gray-300"
                 aria-label="Kapat"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 </svg>
               </button>
             </div>
