@@ -63,7 +63,6 @@ const UserForm = ({ user, onSubmit, onCancel }: UserFormProps) => {
       [name]: value,
     }));
     
-    // Real-time validation
     validateSingleField(name, value);
   };
 
@@ -79,12 +78,8 @@ const UserForm = ({ user, onSubmit, onCancel }: UserFormProps) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg p-6 w-full max-w-md">
-        <h2 className="text-xl font-bold mb-4">
-          {user ? "Kullanıcıyı Düzenle" : "Yeni Kullanıcı Ekle"}
-        </h2>
-        
+    <div>
+      <div className="bg-white max-w-lg mx-auto p-4 sm:p-6">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-gray-700">
@@ -97,7 +92,8 @@ const UserForm = ({ user, onSubmit, onCancel }: UserFormProps) => {
               value={formData.name}
               onChange={handleChange}
               required
-              className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-1 transition-colors ${
+              placeholder="Ad ve soyadı girin"
+              className={`mt-1 block w-full px-3 py-2 text-base border rounded-md focus:outline-none focus:ring-1 focus:ring-offset-1 transition-colors ${
                 getFieldError('name') && isFieldTouched('name')
                   ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
                   : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500 hover:border-gray-400'
@@ -127,7 +123,8 @@ const UserForm = ({ user, onSubmit, onCancel }: UserFormProps) => {
               value={formData.username}
               onChange={handleChange}
               required
-              className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-1 transition-colors ${
+              placeholder="Kullanıcı adı girin"
+              className={`mt-1 block w-full px-3 py-2 text-base border rounded-md focus:outline-none focus:ring-1 focus:ring-offset-1 transition-colors ${
                 getFieldError('username') && isFieldTouched('username')
                   ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
                   : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500 hover:border-gray-400'
@@ -157,7 +154,8 @@ const UserForm = ({ user, onSubmit, onCancel }: UserFormProps) => {
               value={formData.email}
               onChange={handleChange}
               required
-              className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-1 transition-colors ${
+              placeholder="E-posta adresini girin"
+              className={`mt-1 block w-full px-3 py-2 text-base border rounded-md focus:outline-none focus:ring-1 focus:ring-offset-1 transition-colors ${
                 getFieldError('email') && isFieldTouched('email')
                   ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
                   : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500 hover:border-gray-400'
@@ -173,19 +171,19 @@ const UserForm = ({ user, onSubmit, onCancel }: UserFormProps) => {
             )}
           </div>
 
-          <div className="flex space-x-3 pt-4">
-            <button
-              type="submit"
-              className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-105 active:scale-95"
-            >
-              {user ? "Güncelle" : "Ekle"}
-            </button>
+          <div className="flex justify-end space-x-3 pt-3">
             <button
               type="button"
               onClick={onCancel}
-              className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-105 active:scale-95"
+              className="px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 transition-colors"
             >
               İptal
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:ring-offset-1 transition-colors"
+            >
+              {user ? "Güncelle" : "Ekle"}
             </button>
           </div>
         </form>

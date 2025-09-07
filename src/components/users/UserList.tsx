@@ -1,27 +1,24 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { User } from "../../types/user";
 import type { Post } from "../../types/post";
-import {
-  getUsers,
-  createUser,
-  updateUser,
-  deleteUser,
-} from "../../services/userService";
+import { deleteUser } from "../../services/userService";
 import { getPostsByUserId } from "../../services/postService";
 import UserCard from "./UserCard";
-import UserForm from "./UserForm";
 import QuickEditModal from "../posts/QuickEditModal";
 import { useNotification } from "../../hooks/useNotification";
 import Notification from "../common/Notification";
 
-const UserList = () => {
+interface UserListProps {
+  users: User[];
+  loading: boolean;
+  onEditUser: (user: User) => void;
+  onAddUser: () => void;
+}
+
+const UserList = ({ users, loading, onEditUser, onAddUser }: UserListProps) => {
   const navigate = useNavigate();
-  const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
-  const [showForm, setShowForm] = useState<boolean>(false);
-  const [editingUser, setEditingUser] = useState<User | undefined>(undefined);
   const [selectedUserPosts, setSelectedUserPosts] = useState<Post[]>([]);
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
   const [showUserPosts, setShowUserPosts] = useState<boolean>(false);
@@ -31,68 +28,14 @@ const UserList = () => {
   const { notification, showSuccess, showError, hideNotification } =
     useNotification();
 
-  const fetchUsers = async () => {
-    try {
-      setLoading(true);
-      setError("");
-      const data = await getUsers();
-      setUsers(data);
-    } catch (err) {
-      console.error(err);
-      const errorMessage =
-        "Kullanıcılar yüklenirken hata oluştu. Lütfen sayfayı yenileyin.";
-      setError(errorMessage);
-      showError(errorMessage);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchUsers();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const handleCreateUser = async (userData: Omit<User, "id">) => {
-    try {
-      const newUser = await createUser(userData);
-      setUsers((prev) => [...prev, newUser]);
-      setShowForm(false);
-      showSuccess("Kullanıcı başarıyla oluşturuldu!");
-    } catch (err) {
-      console.error(err);
-      const errorMessage =
-        "Kullanıcı oluşturulurken hata oluştu. Lütfen tekrar deneyin.";
-      setError(errorMessage);
-      showError(errorMessage);
-    }
-  };
-
-  const handleUpdateUser = async (userData: Omit<User, "id">) => {
-    if (!editingUser) return;
-
-    try {
-      const updatedUser = await updateUser(editingUser.id, userData);
-      setUsers((prev) =>
-        prev.map((user) => (user.id === editingUser.id ? updatedUser : user))
-      );
-      setEditingUser(undefined);
-      showSuccess("Kullanıcı başarıyla güncellendi!");
-    } catch (err) {
-      console.error(err);
-      const errorMessage =
-        "Kullanıcı güncellenirken hata oluştu. Lütfen tekrar deneyin.";
-      setError(errorMessage);
-      showError(errorMessage);
-    }
-  };
-
   const handleDeleteUser = async (id: number) => {
     if (!confirm("Bu kullanıcıyı silmek istediğinizden emin misiniz?")) return;
 
     try {
       await deleteUser(id);
-      setUsers((prev) => prev.filter((user) => user.id !== id));
       showSuccess("Kullanıcı başarıyla silindi!");
+      // UsersPage will handle the users state update
+      window.location.reload(); // Simple refresh for now
     } catch (err) {
       console.error(err);
       const errorMessage =
@@ -100,10 +43,6 @@ const UserList = () => {
       setError(errorMessage);
       showError(errorMessage);
     }
-  };
-
-  const handleEditUser = (user: User) => {
-    setEditingUser(user);
   };
 
   const handleViewPosts = async (userId: number) => {
@@ -121,10 +60,6 @@ const UserList = () => {
     }
   };
 
-  const handleCancelForm = () => {
-    setShowForm(false);
-    setEditingUser(undefined);
-  };
 
   const handleCloseUserPosts = () => {
     setShowUserPosts(false);
@@ -170,7 +105,7 @@ const UserList = () => {
         <div className="bg-red-50 border border-red-200 rounded-md p-4 max-w-md mx-auto">
           <p className="text-red-600 mb-4">❌ {error}</p>
           <button
-            onClick={fetchUsers}
+            onClick={() => window.location.reload()}
             className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors"
           >
             Tekrar Dene
@@ -187,7 +122,7 @@ const UserList = () => {
           Kullanıcı Listesi
         </h2>
         <button
-          onClick={() => setShowForm(true)}
+          onClick={onAddUser}
           className="group flex items-center space-x-2 bg-gray-200 text-gray-800 hover:text-white transition-all duration-200 px-3 py-2 rounded-md hover:bg-blue-500 border border-gray-100 hover:border-blue-100"
         >
           <svg
@@ -213,23 +148,16 @@ const UserList = () => {
           <UserCard
             key={user.id}
             user={user}
-            onEdit={handleEditUser}
+            onEdit={onEditUser}
             onDelete={handleDeleteUser}
             onViewPosts={handleViewPosts}
           />
         ))}
       </div>
 
-      {(showForm || editingUser) && (
-        <UserForm
-          user={editingUser}
-          onSubmit={editingUser ? handleUpdateUser : handleCreateUser}
-          onCancel={handleCancelForm}
-        />
-      )}
 
       {showUserPosts && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+        <div className="inset-0  flex items-center justify-center p-4">
           <div className="bg-white rounded-lg p-6 w-full max-w-4xl max-h-[80vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold">

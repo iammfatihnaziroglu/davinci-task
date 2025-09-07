@@ -22,7 +22,7 @@ const Homepage = () => {
         <h1 className="text-4xl font-bold text-gray-900 mb-3">
           DaVinci Board Game
         </h1>
-        <p className="text-lg text-gray-600">
+        <p className="text-lg text-gray-500">
           Kullanıcı ve Post Yönetim Sistemi
         </p>
       </div>
@@ -33,13 +33,13 @@ const Homepage = () => {
           className="group bg-white rounded-xl shadow-sm border border-gray-200 p-8 hover:shadow-md hover:border-blue-300 transition-all duration-200"
         >
           <div className="flex items-center space-x-4">
-            <div className="w-32 h-16 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+            <div className="w-24 h-16 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition-colors">
               <svg
-                className="w-8 h-8 text-blue-600"
+                className="w-7 h-7 text-blue-600"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
-                strokeWidth={2}
+                strokeWidth={1.7}
               >
                 <path
                   strokeLinecap="round"
@@ -49,7 +49,7 @@ const Homepage = () => {
               </svg>
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-gray-900">
+              <h3 className="text-xl font-semibold text-gray-900">
                 Kullanıcılar
               </h3>
                 <p className="text-sm text-gray-500">
@@ -64,13 +64,13 @@ const Homepage = () => {
           className="group bg-white rounded-xl shadow-sm border border-gray-200 p-8 hover:shadow-md hover:border-green-300 transition-all duration-200"
         >
           <div className="flex items-center space-x-4">
-            <div className="w-32 h-16 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-200 transition-colors">
+            <div className="w-24 h-16 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-200 transition-colors">
               <svg
                 className="w-8 h-8 text-green-600"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
-                strokeWidth={2}
+                strokeWidth={1.7}
               >
                 <path
                   strokeLinecap="round"
@@ -80,7 +80,7 @@ const Homepage = () => {
               </svg>
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-gray-900">Postlar</h3>
+              <h3 className="text-xl font-semibold text-gray-900">Postlar</h3>
                 <p className="text-sm text-gray-500">
                 Postlar, post oluşturma ve yönetimi
               </p>

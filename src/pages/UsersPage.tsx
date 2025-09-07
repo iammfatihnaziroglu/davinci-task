@@ -1,12 +1,19 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import UserList from "../components/users/UserList";
-import { getUsers } from "../services/userService";
+import UserForm from "../components/users/UserForm";
+import { getUsers, createUser, updateUser } from "../services/userService";
 import type { User } from "../types/user";
+import { useNotification } from "../hooks/useNotification";
+import Notification from "../components/common/Notification";
 
 const UsersPage = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [showForm, setShowForm] = useState<boolean>(false);
+  const [editingUser, setEditingUser] = useState<User | undefined>(undefined);
+
+  const { notification, showSuccess, showError, hideNotification } = useNotification();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -22,6 +29,51 @@ const UsersPage = () => {
 
     fetchUsers();
   }, []);
+
+  const handleCreateUser = async (userData: Omit<User, "id">) => {
+    try {
+      const newUser = await createUser(userData);
+      setUsers((prev) => [...prev, newUser]);
+      setShowForm(false);
+      showSuccess("Kullanıcı başarıyla oluşturuldu!");
+    } catch (err) {
+      console.error(err);
+      showError("Kullanıcı oluşturulurken hata oluştu. Lütfen tekrar deneyin.");
+    }
+  };
+
+  const handleUpdateUser = async (userData: Omit<User, "id">) => {
+    if (!editingUser) return;
+
+    try {
+      const updatedUser = await updateUser(editingUser.id, userData);
+      setUsers((prev) =>
+        prev.map((user) => (user.id === editingUser.id ? updatedUser : user))
+      );
+      setEditingUser(undefined);
+      setShowForm(false);
+      showSuccess("Kullanıcı başarıyla güncellendi!");
+    } catch (err) {
+      console.error(err);
+      showError("Kullanıcı güncellenirken hata oluştu. Lütfen tekrar deneyin.");
+    }
+  };
+
+  const handleEditUser = (user: User) => {
+    setEditingUser(user);
+    setShowForm(true);
+  };
+
+  const handleCancelForm = () => {
+    setShowForm(false);
+    setEditingUser(undefined);
+  };
+
+  const handleAddUser = () => {
+    setEditingUser(undefined);
+    setShowForm(true);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white shadow-sm border-b border-gray-200">
@@ -105,8 +157,56 @@ const UsersPage = () => {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <UserList />
+        <UserList 
+          users={users}
+          loading={loading}
+          onEditUser={handleEditUser}
+          onAddUser={handleAddUser}
+        />
       </div>
+
+      {showForm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px]" onClick={handleCancelForm} />
+          <div className="relative bg-white w-full max-w-lg rounded-xl shadow-xl border border-gray-200">
+            <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 rounded-md bg-blue-50 flex items-center justify-center">
+                  <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.5v15m7.5-7.5h-15" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-800">
+                  {editingUser ? "Kullanıcıyı Düzenle" : "Yeni Kullanıcı"}
+                </h3>
+              </div>
+              <button
+                onClick={handleCancelForm}
+                className="p-2 rounded-md hover:bg-gray-100 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-1 focus:ring-gray-300"
+                aria-label="Kapat"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="px-5 py-4">
+              <UserForm
+                user={editingUser}
+                onSubmit={editingUser ? handleUpdateUser : handleCreateUser}
+                onCancel={handleCancelForm}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      <Notification
+        message={notification.message}
+        type={notification.type}
+        isVisible={notification.isVisible}
+        onClose={hideNotification}
+      />
     </div>
   );
 };
