@@ -103,7 +103,7 @@ const PostForm = ({ post, users, onSubmit, onCancel }: PostFormProps) => {
               className={`mt-1 block w-full px-3 py-2 text-base border rounded-md focus:outline-none focus:ring-1 focus:ring-offset-1 transition-colors ${
                 getFieldError('userId') && isFieldTouched('userId')
                   ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
-                  : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500 hover:border-gray-400'
+                  : 'border-gray-300 focus:ring-green-500 focus:border-green-500 hover:border-gray-400'
               }`}
             >
               <option value={0}>Kullanıcı seçin</option>
@@ -137,7 +137,7 @@ const PostForm = ({ post, users, onSubmit, onCancel }: PostFormProps) => {
               className={`mt-1 block w-full px-3 py-2 text-base border rounded-md focus:outline-none focus:ring-1 focus:ring-offset-1 transition-colors ${
                 getFieldError('title') && isFieldTouched('title')
                   ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
-                  : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500 hover:border-gray-400'
+                  : 'border-gray-300 focus:ring-green-500 focus:border-green-500 hover:border-gray-400'
               }`}
             />
             {getFieldError('title') && isFieldTouched('title') && (
@@ -163,7 +163,7 @@ const PostForm = ({ post, users, onSubmit, onCancel }: PostFormProps) => {
             </button>
             <button
               type="submit"
-              className="px-4 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:ring-offset-1 transition-colors"
+              className="px-4 py-2 text-sm bg-green-600 text-white rounded hover:bg-green-700 focus:outline-none focus:ring-1 focus:ring-green-500 focus:ring-offset-1 transition-colors"
             >
               {post ? "Güncelle" : "Ekle"}
             </button>
