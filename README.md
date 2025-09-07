@@ -99,7 +99,3 @@ src/
 ```bash
 npm run lint
 ```
-Hedef: Uygulamada lint hatası bırakmamak.
-
-
-Ek not: Görev metninde istenen gereksinimler (sayfalar, listeler, CRUD, ilişki, tipler, lint uyumu ve basit UI) bu projede uygulanmıştır. Canlı demo linki mevcutsa buraya eklenebilir.
