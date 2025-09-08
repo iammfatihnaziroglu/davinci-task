@@ -1,7 +1,7 @@
 ## Davinci Task — React + TypeScript + Tailwindcss + Vite
 ### Frontend Dev. Phase1
 
-Canlı Demo: [https://davincitask.vercel.app](https://davincitask.vercel.app)
+Canlı Demo: [https://davinci-task.vercel.app](https://davinci-task.vercel.app)
 
 React + TypeScript + Tailwindcss + Vite ile geliştirilen bir frontend uygulamasıdır. JSONPlaceholder API’sinden kullanıcı ve gönderi verilerini çeker, listeler ve istemci tarafında CRUD (oluşturma, güncelleme, silme) işlemlerini destekler. Arayüz basit ve erişilebilir olacak şekilde tasarlanmıştır; kod tabanı TypeScript ve ESLint kurallarıyla uyumludur.
 
